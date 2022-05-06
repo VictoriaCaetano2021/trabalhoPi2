@@ -1,6 +1,6 @@
 # trabalhoPi2
 
-link do video : 17:55
+link do video : 
 https://youtu.be/xF6YM7ZsIOo
 
 passo a passo:
