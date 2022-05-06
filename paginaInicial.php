@@ -68,8 +68,10 @@ while ($dados=pg_fetch_array($result)){
 
     <?php
          $sqlDadosPergunta="SELECT usuario.nm_usuario, pergunta.id_pergunta, pergunta.id_usuario, pergunta.titulo_pergunta, pergunta.texto_pergunta, pergunta.data_pergunta 
-                             from trabalhopi.tb_pergunta pergunta, trabalhopi.tb_usuario usuario where
-                             pergunta.id_usuario=usuario.id_usuario order by pergunta.data_pergunta desc;
+         from trabalhopi.tb_pergunta pergunta, trabalhopi.tb_usuario usuario where
+         pergunta.id_usuario=usuario.id_usuario 
+         group by pergunta.id_pergunta, usuario.nm_usuario,  pergunta.id_usuario, pergunta.titulo_pergunta, pergunta.texto_pergunta, pergunta.data_pergunta
+         order by pergunta.data_pergunta desc;
         ";
 
         $resultPergunta=pg_query($conexao, $sqlDadosPergunta);
@@ -82,10 +84,13 @@ while ($dados=pg_fetch_array($result)){
                 $texto_pergunta=$dados['texto_pergunta']; 
                 $data_pergunta=$dados['data_pergunta'];
 
-                $sqlDadosComentario=" SELECT usuario.nm_usuario, comentario.texto_comentario, data_comentario 
-                                            from trabalhopi.tb_comentario comentario, trabalhopi.tb_usuario usuario
-                                            where comentario.id_usuario=usuario.id_usuario and
-                                            comentario.id_pergunta= '$id_pergunta' order by comentario.data_comentario desc;                 
+                $sqlDadosComentario=" SELECT usuario.nm_usuario, comentario.id_usuario, comentario.id_comentario, comentario.data_comentario,  comentario.texto_comentario
+                                    from TRABALHOPI.tb_comentario comentario , TRABALHOPI.tb_usuario usuario
+                                     where
+                                        comentario.id_usuario=usuario.id_usuario AND
+                                        comentario.id_pergunta='$id_pergunta'
+                                        group by  comentario.id_usuario, comentario.id_comentario, usuario.nm_usuario,comentario.data_comentario,comentario.texto_comentario ;
+                    
                     ";
                 $resultComentario=pg_query($conexao, $sqlDadosComentario);
 
